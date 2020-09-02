@@ -2,7 +2,10 @@ package common;
 
 public enum ErrorCode {
     OK(0,"ok"),
-    URL_INVALID(1,"url格式不正确");
+    URL_INVALID(1,"url格式不正确"),
+    OPEN_CONNECTION_FAILED(1,"打开url链接失败"),
+    CONNECT_FAILED(1,"连接失败"),
+    REQUEST_FAILED(1,"请求失败，http错误代码：%d");
 
 
     public int getCode() {

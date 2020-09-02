@@ -2,18 +2,19 @@ package common;
 
 import lombok.Data;
 
+import java.net.HttpURLConnection;
 import java.net.URLConnection;
 @Data
 public class URLConnectionResult {
     boolean isSuccess;
     int code;
     String msg;
-    URLConnection connection;
+    HttpURLConnection httpConnection;
 
-    public URLConnectionResult(ErrorCode errorCode, URLConnection connection) {
+    public URLConnectionResult(ErrorCode errorCode, HttpURLConnection connection) {
         code = errorCode.getCode();
         msg = errorCode.getMsg();
-        this.connection = connection;
+        httpConnection = connection;
         if (code == 0) {
             isSuccess = true;
         }

@@ -1,9 +1,22 @@
 package core;
 
+import common.URLConnectionResult;
+import core.Impl.Catcher;
+
+import java.net.HttpURLConnection;
+
 public interface CatcherIface {
 
-    String get(String url);
+    Catcher get(String url);
 
-    String post(String url);
+    Catcher post(String url);
+
+    Catcher addData(String data);
+
+    Catcher addHeader(String key,String val);
+
+    String catchContent();
+
+
 
 }
