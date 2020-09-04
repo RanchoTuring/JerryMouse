@@ -4,14 +4,13 @@ import common.HTTPMethod;
 import common.URLConnectionResult;
 import core.BaseOp;
 import core.CatcherIface;
-import lombok.Data;
 
-@Data
+
 public class Catcher implements CatcherIface {
 
-    BaseOp baseOp = new BaseOp();
-    StringBuffer dataBuf=new StringBuffer();
-    URLConnectionResult connectionResult;
+    private BaseOp baseOp = new BaseOp();
+    private StringBuffer dataBuf = new StringBuffer();
+    private URLConnectionResult connectionResult;
 
     @Override
     public Catcher get(String urlStr) {
@@ -21,7 +20,7 @@ public class Catcher implements CatcherIface {
             baseOp.setRequestMethod(result, HTTPMethod.GET);
         }
 
-        this.setConnectionResult(result);
+        connectionResult = result;
         return this;
     }
 
@@ -33,13 +32,13 @@ public class Catcher implements CatcherIface {
             baseOp.setRequestMethod(result, HTTPMethod.POST);
         }
 
-        this.setConnectionResult(result);
+        connectionResult = result;
         return this;
     }
 
     @Override
     public Catcher addHeader(String key, String val) {
-        connectionResult.getHttpConnection().addRequestProperty(key,val);
+        connectionResult.getHttpConnection().addRequestProperty(key, val);
         return this;
     }
 
@@ -51,6 +50,11 @@ public class Catcher implements CatcherIface {
 
     @Override
     public String catchContent() {
-        return baseOp.requestAndCatch(connectionResult.getHttpConnection(),dataBuf.toString());
+        return baseOp.requestAndCatch(connectionResult.getHttpConnection(), dataBuf.toString());
+    }
+
+    @Override
+    public String catchAndOutput(String path, String fileName) {
+        return null;
     }
 }

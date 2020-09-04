@@ -5,7 +5,8 @@ public enum ErrorCode {
     URL_INVALID(1,"url格式不正确"),
     OPEN_CONNECTION_FAILED(1,"打开url链接失败"),
     CONNECT_FAILED(1,"连接失败"),
-    REQUEST_FAILED(1,"请求失败，http错误代码：%d");
+    REQUEST_FAILED(1,"请求失败，http错误代码：%d"),
+    TIMEOUT(1,"请求超时，请重试");
 
 
     public int getCode() {

@@ -1,6 +1,5 @@
 package core;
 
-
 import common.ErrorCode;
 import common.HTTPMethod;
 import common.URLConnectionResult;
@@ -10,14 +9,16 @@ import java.net.*;
 
 public class BaseOp {
 
-
     public boolean verifyUrl(String url) {
         //TODO finish
         return true;
     }
 
-
     public URL getUrl(String urlString) {
+        //没有指定协议时，默认使用http
+        if (urlString.length() < 8 || (!"http://".equals(urlString.substring(0, 7)) && !"https://".equals(urlString.substring(0, 8)))) {
+            urlString = "http://" + urlString;
+        }
         URL url = null;
         try {
             url = new URL(urlString);
@@ -82,6 +83,8 @@ public class BaseOp {
                 return String.format(ErrorCode.REQUEST_FAILED.getMsg(), connection.getResponseCode());
             }
 
+        } catch (SocketTimeoutException e) {
+            return ErrorCode.TIMEOUT.getMsg();
         } catch (Exception e) {
             e.printStackTrace();
             return ErrorCode.CONNECT_FAILED.getMsg();
