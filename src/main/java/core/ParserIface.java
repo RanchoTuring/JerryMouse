@@ -19,6 +19,8 @@ public interface ParserIface {
 
     ParserIface getChildren();
 
+    String getText();
+
     String parse();
 
 

@@ -7,10 +7,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.LinkedList;
-import java.util.List;
-
-
 public class Parser implements ParserIface {
 
     private Document doc;
@@ -36,30 +32,36 @@ public class Parser implements ParserIface {
     }
 
     @Override
-    public ParserIface getNodes(String css) {
+    public ParserIface getNodes(String selector) {
         if (inNodes) {
-            currentNodes = currentNodes.select(css);
+            currentNodes = currentNodes.select(selector);
         } else {
-            currentNodes = currentNode.select(css);
+            currentNodes = currentNode.select(selector);
         }
         inNodes = true;
         return this;
     }
 
     @Override
-    public ParserIface getNode(String css) {
+    public ParserIface getNode(String selector) {
         if (inNodes) {
-            currentNode = currentNodes.select(css).first();
+            currentNode = currentNodes.select(selector).first();
         } else {
-            currentNode = currentNode.select(css).first();
+            currentNode = currentNode.select(selector).first();
         }
         inNodes = false;
         return this;
     }
 
+    /**
+     * 根据selector获取一个元素，然后获取该元素的子元素
+     *
+     * @param selector
+     * @return
+     */
     @Override
-    public ParserIface getItsChildren(String css) {
-        getNode(css);
+    public ParserIface getItsChildren(String selector) {
+        getNode(selector);
         currentNodes = currentNode.children();
         inNodes = true;
         return this;
@@ -77,28 +79,43 @@ public class Parser implements ParserIface {
     }
 
     @Override
+    public String getText() {
+        if (inNodes) {
+            throw new RuntimeException("无法获取多个节点对象的children");
+        } else {
+            return currentNode.text();
+        }
+    }
+
+    @Override
     public String parse() {
         //TODO finish
         return doc.text();
     }
 
     @Override
-    public ParserIface forEachPrint(String patten, String... css) {
+    public ParserIface forEachPrint(String patten, String... selector) {
         String[] strings;
         int i;
         if (inNodes) {
             for (Element node : currentNodes) {
-                strings = new String[css.length];
+                strings = new String[selector.length];
                 i = 0;
-                for (String str : css) {
-                    strings[i++] = node.select(str).first().text();
+                for (String str : selector) {
+                    if (str.contains("!")) {
+                        String[] para=str.split("!");
+                        strings[i++] = node.select(para[0]).first().attr(para[1]);
+                    } else {
+
+                        strings[i++] = node.select(str).first().text();
+                    }
                 }
                 System.out.printf(patten, strings);
             }
         } else {
-            strings = new String[css.length];
+            strings = new String[selector.length];
             i = 0;
-            for (String str : css) {
+            for (String str : selector) {
                 strings[i++] = currentNode.select(str).first().text();
             }
             System.out.printf(patten, strings);
