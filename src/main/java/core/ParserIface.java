@@ -2,7 +2,6 @@ package core;
 
 import core.Entity.ForTask;
 
-import javax.swing.text.Document;
 
 public interface ParserIface {
     ParserIface doc(String html);
@@ -19,7 +18,11 @@ public interface ParserIface {
 
     ParserIface getChildren();
 
+    String getAttr(String key);
+
     String getText();
+
+    String[] getTexts(String... selector);
 
     String parse();
 

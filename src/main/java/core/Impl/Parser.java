@@ -81,12 +81,38 @@ public class Parser implements ParserIface {
     @Override
     public String getText() {
         if (inNodes) {
-            throw new RuntimeException("无法获取多个节点对象的children");
+            throw new RuntimeException("无法对多个节点进行该操作");
         } else {
             return currentNode.text();
         }
     }
 
+    @Override
+    public String[] getTexts(String... selector) {
+        if (inNodes) {
+            throw new RuntimeException("无法对多个节点进行该操作");
+        } else {
+            int len = selector.length;
+            String[] texts = new String[len];
+
+            for (int i = 0; i < len; i++) {
+                texts[i] = currentNode.select(selector[i]).first().text();
+            }
+            return texts;
+        }
+
+    }
+
+    @Override
+    public String getAttr(String key) {
+        if (inNodes) {
+            throw new RuntimeException("无法对多个节点进行该操作");
+        } else {
+            return currentNode.attr(key);
+        }
+    }
+
+    @Deprecated
     @Override
     public String parse() {
         //TODO finish
@@ -103,7 +129,7 @@ public class Parser implements ParserIface {
                 i = 0;
                 for (String str : selector) {
                     if (str.contains("!")) {
-                        String[] para=str.split("!");
+                        String[] para = str.split("!");
                         strings[i++] = node.select(para[0]).first().attr(para[1]);
                     } else {
 
